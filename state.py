@@ -25,7 +25,6 @@ class Player():
         print(self.display_attributes())
         messages = ai.next(messages, self.display_attributes() + dbs.preprompts["birth_event"] , step_name="brith_event")
         self.experiences.append(messages[-1].content.strip()) 
-        self.age += 5
 
     def event_gen(self, ai, dbs):
         # 生成事件
@@ -45,7 +44,7 @@ class Player():
         # 根据事件更新玩家属性（这部分将根据你的具体需求进行定义）
         update = self.display_attributes() + dbs.preprompts["update_properties"] 
         messages = ai.next(messages, update, step_name="update_properties")
-        self.update_from_json(messages[-1].content.strip())
+        return self.update_from_json(messages[-1].content.strip())
 
         
     def check_status(self, ai, dbs):
@@ -102,6 +101,8 @@ class Player():
         self.health = data.get("身体健康", self.health)
         self.mental_state = data.get("心理健康", self.mental_state)
         self.wealth = data.get("财富", self.wealth)
+
+        return s[0:start_idx-10]
 
     def to_dict(self) -> dict:
         """
